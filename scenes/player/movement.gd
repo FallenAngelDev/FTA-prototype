@@ -29,7 +29,7 @@ func _physics_process(delta: float) -> void:
 	var direction := (camera.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		anim_tree[blend_space] = lerp(anim_tree[blend_space], input_dir, 0.1)
-		$male_human_base.rotation.y = camera.rotation.y
+		$male_human_base.rotation.y = lerp($male_human_base.rotation.y, camera.rotation.y, 0.1)
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 	else:
