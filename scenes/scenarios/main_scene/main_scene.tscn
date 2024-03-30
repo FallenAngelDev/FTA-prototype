@@ -1,0 +1,82 @@
+[gd_scene load_steps=12 format=3 uid="uid://cjawpuefe0ww6"]
+
+[ext_resource type="Texture2D" uid="uid://c6e8skfj8x4aq" path="res://assets/textures/templategrid_albedo.png" id="1_i23ya"]
+[ext_resource type="PackedScene" uid="uid://tgiiwsw8m384" path="res://scenes/player/player.tscn" id="2_p1nhh"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="3_48b1q"]
+[ext_resource type="Resource" path="res://scenes/scenarios/main_scene/terrain/data.hterrain" id="4_pd82i"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="5_677eh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4mmqp"]
+albedo_color = Color(0.678431, 0.678431, 0.678431, 1)
+albedo_texture = ExtResource("1_i23ya")
+uv1_scale = Vector3(0.1, 0.1, 0.1)
+uv1_triplanar = true
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_b74la"]
+material = SubResource("StandardMaterial3D_4mmqp")
+size = Vector2(200, 200)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_kcdcj"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
+
+[sub_resource type="SphereOccluder3D" id="SphereOccluder3D_2wn1u"]
+radius = 35.9794
+
+[sub_resource type="Environment" id="Environment_n14p8"]
+ambient_light_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Resource" id="Resource_xathc"]
+script = ExtResource("5_677eh")
+mode = 0
+textures = [[ExtResource("1_i23ya")], [null]]
+
+[node name="MainScene" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.55204, 0)
+visible = false
+mesh = SubResource("PlaneMesh_b74la")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="MeshInstance3D"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D2"]
+shape = SubResource("ConcavePolygonShape3D_kcdcj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.652337, 0.757929, 0, -0.757929, 0.652337, 0, 13.714, 17.2128)
+light_energy = 0.8
+light_bake_mode = 1
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_p1nhh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.490872, 0, 2.03378)
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.065033)
+visible = false
+occluder = SubResource("SphereOccluder3D_2wn1u")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_n14p8")
+
+[node name="HTerrain" type="Node3D" parent="."]
+script = ExtResource("3_48b1q")
+centered = true
+_terrain_data = ExtResource("4_pd82i")
+chunk_size = 32
+collision_enabled = true
+collision_layer = 2
+collision_mask = 0
+shader_type = "Classic4Lite"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = SubResource("Resource_xathc")
+render_layers = 1
+cast_shadow = 1
+shader_params/u_ground_uv_scale = 40.0
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = null
+shader_params/u_tile_reduction = null

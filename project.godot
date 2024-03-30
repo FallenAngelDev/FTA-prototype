@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Fta-prototype"
-run/main_scene="res://scenes/scenarios/main_scene.tscn"
+run/main_scene="res://scenes/scenarios/main_scene/main_scene.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/zylann.hterrain/plugin.cfg")
 
 [input]
 
@@ -47,3 +51,4 @@ right={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+occlusion_culling/use_occlusion_culling=true
